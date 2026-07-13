@@ -1,25 +1,26 @@
 {{ 'section-featured-cards.css' | asset_url | stylesheet_tag }}
 
-<section class="featured-cards section section--padding">
+<section class="featured-cards section section--padding py-12 md:py-20">
   <div class="page-width">
 
     {% if section.settings.heading != blank %}
-      <h2 class="featured-cards__heading">
+      <h2 class="text-center mb-8 md:mb-12">
         {{ section.settings.heading }}
       </h2>
     {% endif %}
 
-    <div class="featured-cards__grid">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
 
       {% for block in section.blocks %}
         <article
-          class="featured-card"
+          class="relative overflow-hidden rounded-[2rem] min-h-[560px] md:min-h-[680px]"
           {{ block.shopify_attributes }}
         >
 
+          {% comment %} Desktop image {% endcomment %}
           {% if block.settings.image != blank %}
             <img
-              class="featured-card__image"
+              class="hidden md:block absolute inset-0 w-full h-full object-cover"
               src="{{ block.settings.image | image_url: width: 1200 }}"
               alt="{{ block.settings.image.alt | escape }}"
               width="{{ block.settings.image.width }}"
@@ -28,34 +29,50 @@
             >
           {% endif %}
 
-          <div class="featured-card__overlay">
+          {% comment %} Mobile image (falls back to desktop image if none set) {% endcomment %}
+          {% if block.settings.mobile_image != blank or block.settings.image != blank %}
+            <img
+              class="block md:hidden absolute inset-0 w-full h-full object-cover"
+              src="{{ block.settings.mobile_image | default: block.settings.image | image_url: width: 800 }}"
+              alt="{{ block.settings.mobile_image.alt | default: block.settings.image.alt | escape }}"
+              width="{{ block.settings.mobile_image.width | default: block.settings.image.width }}"
+              height="{{ block.settings.mobile_image.height | default: block.settings.image.height }}"
+              loading="lazy"
+            >
+          {% endif %}
 
-            {% if block.settings.badge != blank %}
-              <div class="featured-card__badge">
-                {{ block.settings.badge }}
-              </div>
-            {% endif %}
+          <div class="relative z-10 flex flex-col h-full w-full
+                      items-center justify-center text-center
+                      md:items-start md:justify-start md:text-left
+                      p-8 md:p-12">
 
-            {% if block.settings.heading != blank %}
-              <h3 class="featured-card__title text-[40px] max-md:text-[24px] font-bold">
-                {{ block.settings.heading }}
-              </h3>
-            {% endif %}
+            <div class="w-full md:max-w-[52%] flex flex-col items-center md:items-start text-center md:text-left">
 
-            {% if block.settings.text != blank %}
-              <h6 class="featured-card__text">
-                {{ block.settings.text }}
-              </h6>
-            {% endif %}
+              {% if block.settings.badge != blank %}
+                <div class="inline-flex items-center justify-center px-4 py-[0.45rem] mb-6 border-2 border-[#6622cc] rounded-full bg-white/90 font-bold leading-none text-[#6622cc]">
+                  {{ block.settings.badge }}
+                </div>
+              {% endif %}
 
-            {% if block.settings.button_label != blank %}
-              <a
-                href="{{ block.settings.button_link | default: '#' }}"
-                class="btn btn-secondary featured-card__button"
-              >
-                {{ block.settings.button_label }}
-              </a>
-            {% endif %}
+              {% if block.settings.heading != blank %}
+                <h3 class="text-[28px] md:text-[32px] font-bold mb-4 leading-[1.1]">
+                  {{ block.settings.heading }}
+                </h3>
+              {% endif %}
+
+              {% if block.settings.text != blank %}
+                <div class="mb-6 leading-normal max-w-[26rem] md:max-w-[30rem]">
+                  {{ block.settings.text }}
+                </div>
+              {% endif %}
+
+              {% if block.settings.button_label != blank %}
+                <a href="{{ block.settings.button_link | default: '#' }}" class="btn btn-secondary">
+                  {{ block.settings.button_label }}
+                </a>
+              {% endif %}
+
+            </div>
 
           </div>
 
@@ -70,15 +87,13 @@
 
 {% schema %}
 {
-  "name": "Featured Cards",
-  "tag": "section",
-  "class": "section-featured-cards",
+  "name": "Featured cards",
   "settings": [
     {
       "type": "text",
       "id": "heading",
-      "label": "Section Heading",
-      "default": "see what's new from method"
+      "label": "Heading",
+      "default": "see what's new"
     }
   ],
   "blocks": [
@@ -86,54 +101,20 @@
       "type": "card",
       "name": "Card",
       "settings": [
-        {
-          "type": "image_picker",
-          "id": "image",
-          "label": "Background Image"
-        },
-        {
-          "type": "text",
-          "id": "badge",
-          "label": "Badge",
-          "default": "new"
-        },
-        {
-          "type": "text",
-          "id": "heading",
-          "label": "Heading",
-          "default": "create your better skin + body regimen"
-        },
-        {
-          "type": "textarea",
-          "id": "text",
-          "label": "Description",
-          "default": "meet our body wash tonics. an innovative collection for your specific skincare needs."
-        },
-        {
-          "type": "text",
-          "id": "button_label",
-          "label": "Button",
-          "default": "shop now"
-        },
-        {
-          "type": "url",
-          "id": "button_link",
-          "label": "Button Link"
-        }
+        { "type": "image_picker", "id": "image", "label": "Image (desktop)" },
+        { "type": "image_picker", "id": "mobile_image", "label": "Image (mobile)" },
+        { "type": "text", "id": "badge", "label": "Badge" },
+        { "type": "text", "id": "heading", "label": "Heading" },
+        { "type": "richtext", "id": "text", "label": "Text" },
+        { "type": "text", "id": "button_label", "label": "Button label" },
+        { "type": "url", "id": "button_link", "label": "Button link" }
       ]
     }
   ],
   "presets": [
     {
-      "name": "Featured Cards",
-      "blocks": [
-        {
-          "type": "card"
-        },
-        {
-          "type": "card"
-        }
-      ]
+      "name": "Featured cards",
+      "blocks": [{ "type": "card" }, { "type": "card" }]
     }
   ]
 }
