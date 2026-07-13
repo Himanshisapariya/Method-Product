@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "image_banner": {
@@ -26,50 +35,72 @@
         "heading",
         "button"
       ],
+      "disabled": true,
       "settings": {
         "image_overlay_opacity": 40,
         "image_height": "large",
-        "desktop_content_position": "bottom-center",
-        "show_text_box": false,
         "image_behavior": "none",
+        "desktop_content_position": "bottom-center",
         "desktop_content_alignment": "center",
+        "show_text_box": false,
         "color_scheme": "scheme-3",
-        "mobile_content_alignment": "center",
         "stack_images_on_mobile": false,
+        "mobile_content_alignment": "center",
         "show_text_below": false
       }
     },
-    "featured_collection": {
-      "type": "featured-collection",
+    "hero_banner_HkGVLA": {
+      "type": "hero-banner",
+      "name": "Hero Banner",
       "settings": {
-        "title": "Featured products",
-        "heading_size": "h2",
-        "description": "",
-        "show_description": false,
-        "description_style": "body",
-        "collection": "all",
-        "products_to_show": 8,
-        "columns_desktop": 4,
-        "color_scheme": "scheme-1",
-        "full_width": false,
-        "show_view_all": true,
-        "view_all_style": "solid",
-        "enable_desktop_slider": false,
-        "swipe_on_mobile": false,
-        "image_ratio": "adapt",
-        "image_shape": "default",
-        "show_secondary_image": true,
-        "show_vendor": false,
-        "show_rating": false,
-        "quick_add": "none",
-        "columns_mobile": "2",
-        "padding_top": 44,
-        "padding_bottom": 36
+        "desktop_image": "shopify://shop_images/SCJ_METHOD_DISH_2025_KV_SuperShine_DishSoap_MTHD_Dish_Foaming_Homepage_Desktop_2x_0bb31c5d-0429-4738-b857-e240d8c43446.webp",
+        "mobile_image": "shopify://shop_images/SCJ_METHOD_DISH_2025_KV_SuperShine_DishSoap_MTHD_Dish_Foaming_Homepage_Mobile_2x_755026e7-5205-4632-abd8-2e7fbd896ced.jpg",
+        "eyebrow": "new!",
+        "heading": "break up with basic dish soap. meet",
+        "heading_highlight": "super shine.",
+        "button_label": "shop dish soap",
+        "button_link": ""
+      }
+    },
+    "feature_cards_VQiKCy": {
+      "type": "feature-cards",
+      "blocks": {
+        "card_eQqR3z": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/whats_new_-_ulta.webp",
+            "badge": "new",
+            "heading": "create your better skin + body regimen",
+            "text": "<p>meet our body wash tonics. an innovative collection for your specific skincare needs.</p>",
+            "button_label": "shop now",
+            "button_link": ""
+          }
+        },
+        "card_jkmmGb": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/hydrating-serum-new--desktop.webp",
+            "badge": "new",
+            "heading": "create your better skin + body regimen",
+            "text": "<p>meet our body wash tonics. an innovative collection for your specific skincare needs.</p>",
+            "button_label": "shop now",
+            "button_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "card_eQqR3z",
+        "card_jkmmGb"
+      ],
+      "name": "Featured Cards",
+      "settings": {
+        "heading": "see what's new from method"
       }
     }
   },
   "order": [
     "image_banner",
-    "featured_collection"
+    "hero_banner_HkGVLA",
+    "feature_cards_VQiKCy"
   ]
 }
