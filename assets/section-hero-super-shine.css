@@ -1,0 +1,109 @@
+/* assets/section-hero-super-shine.css
+   Layout only.
+   Typography, buttons and colors come from application.css.
+*/
+
+/* --------------------------------------------------------------------------
+   Section
+-------------------------------------------------------------------------- */
+
+.hero-banner {
+  width: 100%;
+  overflow: hidden;
+  background: var(--color-paper);
+}
+
+/* --------------------------------------------------------------------------
+   Desktop
+-------------------------------------------------------------------------- */
+
+.hero-banner__desktop {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 720px;
+  overflow: hidden;
+}
+
+.hero-banner__desktop .hero-banner__media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-banner__content {
+  position: relative;
+  z-index: 2;
+
+  max-width: 620px;
+
+  margin-left: clamp(2rem, 8vw, 14rem);
+}
+
+.hero-banner__eyebrow {
+  margin-bottom: .75rem;
+}
+
+.hero-banner__heading {
+  margin-bottom: 2.5rem;
+}
+
+/* --------------------------------------------------------------------------
+   Mobile
+-------------------------------------------------------------------------- */
+
+.hero-banner__mobile {
+  display: none;
+}
+
+@media (max-width:767px){
+
+  .hero-banner__desktop{
+    display:none;
+  }
+
+  .hero-banner__mobile{
+    display:block;
+  }
+
+  .hero-banner__mobile-image-wrapper{
+    position:relative;
+  }
+
+  .hero-banner__mobile .hero-banner__media{
+    display:block;
+    width:100%;
+    height:auto;
+  }
+
+  .hero-banner__mobile-content{
+    position:absolute;
+    inset:0;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+
+    text-align:center;
+
+    padding:40px 20px 24px;
+  }
+
+  .hero-banner__eyebrow{
+    margin-bottom:8px;
+  }
+
+  .hero-banner__heading{
+    max-width:320px;
+    margin-bottom:auto;
+  }
+
+  .hero-banner__btn{
+    margin-bottom:24px;
+    width:calc(100% - 48px);
+    max-width:260px;
+  }
+
+}
