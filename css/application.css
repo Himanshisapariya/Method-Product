@@ -6,6 +6,12 @@
 
 @import "tailwindcss";
 
+@source "../layout/**/*.liquid";
+@source "../sections/**/*.liquid";
+@source "../snippets/**/*.liquid";
+@source "../templates/**/*.liquid";
+@source "../assets/**/*.js";
+
 /* --------------------------------------------------------------------------
    0. FONT FACES — mirrors methodproducts.com exactly
    -------------------------------------------------------------------------- */

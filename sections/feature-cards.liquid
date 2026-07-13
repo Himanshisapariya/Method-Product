@@ -1,0 +1,140 @@
+{{ 'section-featured-cards.css' | asset_url | stylesheet_tag }}
+
+<section class="featured-cards section section--padding">
+  <div class="page-width">
+
+    {% if section.settings.heading != blank %}
+      <h2 class="featured-cards__heading">
+        {{ section.settings.heading }}
+      </h2>
+    {% endif %}
+
+    <div class="featured-cards__grid">
+
+      {% for block in section.blocks %}
+        <article
+          class="featured-card"
+          {{ block.shopify_attributes }}
+        >
+
+          {% if block.settings.image != blank %}
+            <img
+              class="featured-card__image"
+              src="{{ block.settings.image | image_url: width: 1200 }}"
+              alt="{{ block.settings.image.alt | escape }}"
+              width="{{ block.settings.image.width }}"
+              height="{{ block.settings.image.height }}"
+              loading="lazy"
+            >
+          {% endif %}
+
+          <div class="featured-card__overlay">
+
+            {% if block.settings.badge != blank %}
+              <div class="featured-card__badge">
+                {{ block.settings.badge }}
+              </div>
+            {% endif %}
+
+            {% if block.settings.heading != blank %}
+              <h3 class="featured-card__title text-[40px] max-md:text-[24px] font-bold">
+                {{ block.settings.heading }}
+              </h3>
+            {% endif %}
+
+            {% if block.settings.text != blank %}
+              <h6 class="featured-card__text">
+                {{ block.settings.text }}
+              </h6>
+            {% endif %}
+
+            {% if block.settings.button_label != blank %}
+              <a
+                href="{{ block.settings.button_link | default: '#' }}"
+                class="btn btn-secondary featured-card__button"
+              >
+                {{ block.settings.button_label }}
+              </a>
+            {% endif %}
+
+          </div>
+
+        </article>
+
+      {% endfor %}
+
+    </div>
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Featured Cards",
+  "tag": "section",
+  "class": "section-featured-cards",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section Heading",
+      "default": "see what's new from method"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Background Image"
+        },
+        {
+          "type": "text",
+          "id": "badge",
+          "label": "Badge",
+          "default": "new"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "create your better skin + body regimen"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Description",
+          "default": "meet our body wash tonics. an innovative collection for your specific skincare needs."
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button",
+          "default": "shop now"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Cards",
+      "blocks": [
+        {
+          "type": "card"
+        },
+        {
+          "type": "card"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
