@@ -96,11 +96,117 @@
       "settings": {
         "heading": "see what's new from method"
       }
+    },
+    "best_seller_carousel_kJTHP9": {
+      "type": "best-seller-carousel",
+      "blocks": {
+        "product_card_aQwXbB": {
+          "type": "product_card",
+          "settings": {
+            "product": "gel-hand-wash-refill",
+            "rating_count": "59",
+            "badge_style": "best_seller",
+            "badge_text": "best seller",
+            "description": ""
+          }
+        },
+        "product_card_iHKLjX": {
+          "type": "product_card",
+          "settings": {
+            "product": "body-wash-1",
+            "rating_count": "59",
+            "badge_style": "new",
+            "badge_text": "best seller",
+            "description": ""
+          }
+        },
+        "product_card_c9E3XW": {
+          "type": "product_card",
+          "settings": {
+            "product": "laundry-detergent",
+            "rating_count": "59",
+            "badge_style": "best_seller",
+            "badge_text": "best seller",
+            "description": ""
+          }
+        },
+        "product_card_gpXRrA": {
+          "type": "product_card",
+          "settings": {
+            "product": "body-wash",
+            "rating_count": "59",
+            "badge_style": "new",
+            "badge_text": "best seller",
+            "description": ""
+          }
+        }
+      },
+      "block_order": [
+        "product_card_aQwXbB",
+        "product_card_iHKLjX",
+        "product_card_c9E3XW",
+        "product_card_gpXRrA"
+      ],
+      "name": "Best sellers carousel",
+      "settings": {
+        "eyebrow": "shop bestsellers",
+        "heading": "go ahead, grab our fan favorites",
+        "background_image": "shopify://shop_images/refill-carousel-vector.webp",
+        "overlay_opacity": 0,
+        "light_text": true
+      }
+    },
+    "product_bundles_EpTDix": {
+      "type": "product-bundles",
+      "blocks": {
+        "bundle_HhxVkF": {
+          "type": "bundle",
+          "settings": {
+            "image": "shopify://shop_images/3ea4251ebeb625eaf3d4c2c013aebc35ac6e2786_1.webp",
+            "title": "the soft radiance bundle",
+            "subtitle": "for glowy, dewy skin",
+            "button_label": "shop the bundle",
+            "button_link": ""
+          }
+        },
+        "bundle_mVEEdh": {
+          "type": "bundle",
+          "settings": {
+            "image": "shopify://shop_images/Rectangle_5_03c2f127-29ea-478f-a7b7-add531e227e7_1.webp",
+            "title": "the smooth hydration bundle",
+            "subtitle": "for clear, hydrated skin",
+            "button_label": "shop the bundle",
+            "button_link": ""
+          }
+        },
+        "bundle_WUcqcA": {
+          "type": "bundle",
+          "settings": {
+            "image": "shopify://shop_images/a87ef715583177b3724044b57ca2a92195892e2d.webp",
+            "title": "the dewy glow bundle",
+            "subtitle": "for smooth, hydrated skin",
+            "button_label": "shop the bundle",
+            "button_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "bundle_HhxVkF",
+        "bundle_mVEEdh",
+        "bundle_WUcqcA"
+      ],
+      "name": "Product Bundles",
+      "settings": {
+        "heading": "shop bundles for your skin needs",
+        "subtext": "your skin deserves a regimen built for you. browse our bundles to create your custom routine."
+      }
     }
   },
   "order": [
     "image_banner",
     "hero_banner_HkGVLA",
-    "feature_cards_VQiKCy"
+    "feature_cards_VQiKCy",
+    "best_seller_carousel_kJTHP9",
+    "product_bundles_EpTDix"
   ]
 }
