@@ -1,0 +1,124 @@
+<section class="product-bundles py-16 md:py-24">
+  <div class="container-lg">
+
+    {% comment %} Section header {% endcomment %}
+    <div class="text-center mb-10 md:mb-14">
+      {% if section.settings.heading != blank %}
+        <h4 class="mb-4">{{ section.settings.heading }}</h4>
+      {% endif %}
+      {% if section.settings.subtext != blank %}
+        <p class="max-w-[640px] mx-auto">{{ section.settings.subtext }}</p>
+      {% endif %}
+    </div>
+
+    {% comment %} Bundle cards {% endcomment %}
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+
+      {% for block in section.blocks %}
+        <div
+          class="flex flex-col items-center text-center"
+          {{ block.shopify_attributes }}
+        >
+
+          {% if block.settings.image != blank %}
+            <a href="{{ block.settings.button_link | default: '#' }}" class="block w-full mb-6 rounded-2xl overflow-hidden">
+              <img
+                class="w-full aspect-square object-cover transition-transform duration-300 hover:scale-[1.03]"
+                src="{{ block.settings.image | image_url: width: 800 }}"
+                alt="{{ block.settings.image.alt | escape }}"
+                loading="lazy"
+                width="{{ block.settings.image.width }}"
+                height="{{ block.settings.image.height }}"
+              >
+            </a>
+          {% endif %}
+
+          <div class="px-20 flex flex-col items-center w-full">
+
+            {% if block.settings.title != blank %}
+              <h4 class="mb-2">{{ block.settings.title }}</h4>
+            {% endif %}
+
+            {% if block.settings.subtitle != blank %}
+              <p class="mb-6">{{ block.settings.subtitle }}</p>
+            {% endif %}
+
+            {% if block.settings.button_label != blank %}
+              <a href="{{ block.settings.button_link | default: '#' }}" class="btn btn-primary">
+                {{ block.settings.button_label }}
+              </a>
+            {% endif %}
+
+          </div>
+
+        </div>
+      {% endfor %}
+
+    </div>
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Product Bundles",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "shop bundles for your skin needs"
+    },
+    {
+      "type": "textarea",
+      "id": "subtext",
+      "label": "Subtext",
+      "default": "your skin deserves a regimen built for you. browse our bundles to create your custom routine."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "bundle",
+      "name": "Bundle",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "title", "label": "Bundle name", "default": "the soft radiance bundle" },
+        { "type": "text", "id": "subtitle", "label": "Subtitle", "default": "for glowy, dewy skin" },
+        { "type": "text", "id": "button_label", "label": "Button label", "default": "shop the bundle" },
+        { "type": "url", "id": "button_link", "label": "Button link" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Bundles",
+      "blocks": [
+        {
+          "type": "bundle",
+          "settings": {
+            "title": "the soft radiance bundle",
+            "subtitle": "for glowy, dewy skin",
+            "button_label": "shop the bundle"
+          }
+        },
+        {
+          "type": "bundle",
+          "settings": {
+            "title": "the smooth hydration bundle",
+            "subtitle": "for clear, hydrated skin",
+            "button_label": "shop the bundle"
+          }
+        },
+        {
+          "type": "bundle",
+          "settings": {
+            "title": "the dewy glow bundle",
+            "subtitle": "for smooth, hydrated skin",
+            "button_label": "shop the bundle"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,270 @@
+{{ 'section-bestsellers-slider.css' | asset_url | stylesheet_tag }}
+
+<section class="bestsellers-slider py-14 md:py-20" style="background: var(--gradient-masterbrand);">
+  <div class="container-lg">
+
+    {% comment %} Header row {% endcomment %}
+    <div class="flex items-end justify-between mb-8 md:mb-10">
+      <div>
+        {% if section.settings.eyebrow != blank %}
+          <p class="bestsellers-slider__eyebrow">{{ section.settings.eyebrow }}</p>
+        {% endif %}
+        {% if section.settings.heading != blank %}
+          <h3 class="bestsellers-slider__heading">{{ section.settings.heading }}</h3>
+        {% endif %}
+      </div>
+
+      <div class="bestsellers-slider__nav hidden md:flex items-center gap-3 pb-2">
+        <button class="bestsellers-slider__btn bestsellers-slider__btn--prev" aria-label="Previous">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" width="20" height="20">
+            <path stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M15 18l-6-6 6-6"/>
+          </svg>
+        </button>
+        <button class="bestsellers-slider__btn bestsellers-slider__btn--next" aria-label="Next">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" width="20" height="20">
+            <path stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M9 18l6-6-6-6"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    {% comment %} Slider track {% endcomment %}
+    <div class="bestsellers-slider__track" id="bestsellers-track-{{ section.id }}">
+
+      {% assign products_source = section.settings.collection.products %}
+      {% if products_source == blank or products_source.size == 0 %}
+        {% assign products_source = section.blocks %}
+      {% endif %}
+
+      {% if section.settings.collection != blank %}
+        {% for product in section.settings.collection.products limit: section.settings.products_to_show %}
+          <div class="bestsellers-slider__slide">
+            <a href="{{ product.url }}" class="bestsellers-slider__card">
+
+              <div class="bestsellers-slider__image-wrap">
+                {% if product.featured_image != blank %}
+                  <img
+                    src="{{ product.featured_image | image_url: width: 600 }}"
+                    alt="{{ product.featured_image.alt | escape }}"
+                    loading="lazy"
+                    class="bestsellers-slider__image"
+                  >
+                {% else %}
+                  {{ 'product-1' | placeholder_svg_tag: 'bestsellers-slider__image bestsellers-slider__image--placeholder' }}
+                {% endif %}
+              </div>
+
+              <div class="bestsellers-slider__info">
+
+                {% comment %} Stars {% endcomment %}
+                <div class="bestsellers-slider__stars">
+                  <span class="bestsellers-slider__stars-icons" aria-hidden="true">★★★★★</span>
+                  <span class="bestsellers-slider__review-count">({{ product.metafields.reviews.rating_count | default: '' }})</span>
+                  <span class="bestsellers-slider__chevron">&#8964;</span>
+                </div>
+
+                {% comment %} Badge {% endcomment %}
+                {% if product.tags contains 'best-seller' or product.tags contains 'bestseller' %}
+                  <span class="bestsellers-slider__badge bestsellers-slider__badge--bestseller">best seller</span>
+                {% elsif product.tags contains 'new' %}
+                  <span class="bestsellers-slider__badge bestsellers-slider__badge--new">new</span>
+                {% endif %}
+
+                <p class="bestsellers-slider__title">{{ product.title }}</p>
+
+                <p class="bestsellers-slider__price">{{ product.price | money }}</p>
+
+                <button
+                  class="btn btn-primary bestsellers-slider__cta"
+                  data-product-id="{{ product.variants.first.id }}"
+                  onclick="event.preventDefault(); addToCart({{ product.variants.first.id }})"
+                >
+                  {{ section.settings.button_label }}
+                </button>
+
+              </div>
+            </a>
+          </div>
+        {% endfor %}
+
+      {% else %}
+        {% comment %} Fallback: render blocks {% endcomment %}
+        {% for block in section.blocks %}
+          <div class="bestsellers-slider__slide" {{ block.shopify_attributes }}>
+            <div class="bestsellers-slider__card">
+
+              <div class="bestsellers-slider__image-wrap">
+                {% if block.settings.image != blank %}
+                  <img
+                    src="{{ block.settings.image | image_url: width: 600 }}"
+                    alt="{{ block.settings.image.alt | escape }}"
+                    loading="lazy"
+                    class="bestsellers-slider__image"
+                  >
+                {% else %}
+                  {{ 'product-1' | placeholder_svg_tag: 'bestsellers-slider__image bestsellers-slider__image--placeholder' }}
+                {% endif %}
+              </div>
+
+              <div class="bestsellers-slider__info">
+
+                <div class="bestsellers-slider__stars">
+                  <span class="bestsellers-slider__stars-icons" aria-hidden="true">★★★★★</span>
+                  {% if block.settings.review_count != blank %}
+                    <span class="bestsellers-slider__review-count">({{ block.settings.review_count }})</span>
+                  {% endif %}
+                  <span class="bestsellers-slider__chevron">&#8964;</span>
+                </div>
+
+                {% if block.settings.badge != blank %}
+                  <span class="bestsellers-slider__badge {% if block.settings.badge_style == 'new' %}bestsellers-slider__badge--new{% else %}bestsellers-slider__badge--bestseller{% endif %}">
+                    {{ block.settings.badge }}
+                  </span>
+                {% endif %}
+
+                {% if block.settings.title != blank %}
+                  <p class="bestsellers-slider__title">{{ block.settings.title }}</p>
+                {% endif %}
+
+                {% if block.settings.price != blank %}
+                  <p class="bestsellers-slider__price">{{ block.settings.price }}</p>
+                {% endif %}
+
+                <a href="{{ block.settings.button_link | default: '#' }}" class="btn btn-primary bestsellers-slider__cta">
+                  {{ section.settings.button_label }}
+                </a>
+
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      {% endif %}
+
+    </div>
+
+    {% comment %} Mobile nav arrows {% endcomment %}
+    <div class="bestsellers-slider__nav flex md:hidden items-center justify-center gap-4 mt-8">
+      <button class="bestsellers-slider__btn bestsellers-slider__btn--prev" aria-label="Previous">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" width="20" height="20">
+          <path stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M15 18l-6-6 6-6"/>
+        </svg>
+      </button>
+      <button class="bestsellers-slider__btn bestsellers-slider__btn--next" aria-label="Next">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" width="20" height="20">
+          <path stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M9 18l6-6-6-6"/>
+        </svg>
+      </button>
+    </div>
+
+  </div>
+</section>
+
+<script>
+  (function() {
+    const section = document.querySelector('#bestsellers-track-{{ section.id }}').closest('.bestsellers-slider');
+    const track = document.getElementById('bestsellers-track-{{ section.id }}');
+    const prevBtns = section.querySelectorAll('.bestsellers-slider__btn--prev');
+    const nextBtns = section.querySelectorAll('.bestsellers-slider__btn--next');
+
+    function getSlideWidth() {
+      const slide = track.querySelector('.bestsellers-slider__slide');
+      if (!slide) return 0;
+      const style = getComputedStyle(track);
+      const gap = parseFloat(style.gap) || 24;
+      return slide.offsetWidth + gap;
+    }
+
+    prevBtns.forEach(btn => btn.addEventListener('click', () => {
+      track.scrollBy({ left: -getSlideWidth(), behavior: 'smooth' });
+    }));
+
+    nextBtns.forEach(btn => btn.addEventListener('click', () => {
+      track.scrollBy({ left: getSlideWidth(), behavior: 'smooth' });
+    }));
+  })();
+
+  function addToCart(variantId) {
+    fetch('/cart/add.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: variantId, quantity: 1 })
+    }).then(() => {
+      document.dispatchEvent(new CustomEvent('cart:refresh'));
+    });
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Bestsellers Slider",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "shop bestsellers"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "go ahead, grab our fan favorites"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection (optional)"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 6,
+      "label": "Products to show (when collection set)"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "add to cart"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product_card",
+      "name": "Product card",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Product image" },
+        { "type": "text", "id": "title", "label": "Product name", "default": "sweet water\ngel hand wash refill" },
+        { "type": "text", "id": "price", "label": "Price", "default": "$7.49" },
+        { "type": "text", "id": "review_count", "label": "Review count", "default": "59" },
+        {
+          "type": "select",
+          "id": "badge_style",
+          "label": "Badge style",
+          "options": [
+            { "value": "bestseller", "label": "Best seller" },
+            { "value": "new", "label": "New" }
+          ],
+          "default": "bestseller"
+        },
+        { "type": "text", "id": "badge", "label": "Badge text", "default": "best seller" },
+        { "type": "url", "id": "button_link", "label": "Product link" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Bestsellers Slider",
+      "blocks": [
+        { "type": "product_card", "settings": { "title": "sweet water gel hand wash refill", "price": "$7.49", "review_count": "59", "badge": "best seller", "badge_style": "bestseller" } },
+        { "type": "product_card", "settings": { "title": "simply nourish body wash", "price": "$12.49", "review_count": "1378", "badge": "new", "badge_style": "new" } },
+        { "type": "product_card", "settings": { "title": "ginger mango laundry detergent", "price": "$14.49", "review_count": "45", "badge": "best seller", "badge_style": "bestseller" } },
+        { "type": "product_card", "settings": { "title": "sea + surf body wash", "price": "$12.49", "review_count": "1323", "badge": "new", "badge_style": "new" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
