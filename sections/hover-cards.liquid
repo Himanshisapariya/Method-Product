@@ -1,0 +1,140 @@
+{{ 'section-hover-cards.css' | asset_url | stylesheet_tag }}
+
+<section class="hover-cards-section">
+  <div class="container-md">
+    <div class="hover-cards-inner flex flex-wrap items-start gap-12">
+
+      <div class="hover-cards-intro flex-none w-full md:w-[280px] max-w-[320px] pt-6">
+        {% if section.settings.eyebrow != blank %}
+          <p class="eyebrow text-sm text-ink-soft mb-2">{{ section.settings.eyebrow }}</p>
+        {% endif %}
+
+        {% if section.settings.heading != blank %}
+          <h2 class="font-display font-bold text-[2rem] md:text-[2.5rem] leading-[1.15] mb-7 text-ink">
+            {{ section.settings.heading }}
+          </h2>
+        {% endif %}
+
+        {% if section.settings.button_label != blank %}
+          <a href="{{ section.settings.button_link | default: '#' }}" class="btn btn-primary">
+            {{ section.settings.button_label }}
+          </a>
+        {% endif %}
+      </div>
+
+      <div class="hover-cards-row flex gap-2 flex-1 min-w-0">
+        {% for block in section.blocks %}
+          <a href="{{ block.settings.link | default: '#' }}"
+             class="hover-card"
+             {{ block.shopify_attributes }}>
+
+            {% if block.settings.image %}
+              <img
+                src="{{ block.settings.image | image_url: width: 800 }}"
+                srcset="{{ block.settings.image | image_url: width: 400 }} 400w,
+                        {{ block.settings.image | image_url: width: 800 }} 800w,
+                        {{ block.settings.image | image_url: width: 1200 }} 1200w"
+                sizes="(max-width: 900px) 240px, 20vw"
+                alt="{{ block.settings.image.alt | escape }}"
+                width="{{ block.settings.image.width }}"
+                height="{{ block.settings.image.height }}"
+                loading="lazy"
+                class="hover-card__img"
+              >
+            {% else %}
+              <div class="hover-card__img hover-card__img--placeholder"></div>
+            {% endif %}
+
+            <div class="hover-card__overlay"></div>
+
+            <div class="hover-card__content">
+              {% if block.settings.heading != blank %}
+                <h3 class="hover-card__heading">{{ block.settings.heading }}</h3>
+              {% endif %}
+              {% if block.settings.button_label != blank %}
+                <span class="pill-btn">{{ block.settings.button_label }}</span>
+              {% endif %}
+            </div>
+          </a>
+        {% endfor %}
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "hover cards",
+  "tag": "section",
+  "class": "section-hover-cards",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "eyebrow text",
+      "default": "explore our collections"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "heading",
+      "default": "show me products that..."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "button label",
+      "default": "view all collections"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "button link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "card image"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "card heading",
+          "default": "are so spa core"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "button label",
+          "default": "view products"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "link"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "hover cards",
+      "blocks": [
+        { "type": "card" },
+        { "type": "card" },
+        { "type": "card" },
+        { "type": "card" },
+        { "type": "card" }
+      ]
+    }
+  ]
+}
+{% endschema %}
