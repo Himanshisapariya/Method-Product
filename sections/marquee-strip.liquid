@@ -1,0 +1,126 @@
+{%- comment -%}
+  Section: Marquee Strip
+  Design system: method-design (Tailwind v4 tokens in css/application.css)
+  Features: infinite CSS marquee on masterbrand gradient background
+{%- endcomment -%}
+
+{% style %}
+  #shopify-section-{{ section.id }} .mqs {
+    overflow: hidden;
+    background: linear-gradient(90deg, #8725ac 0, #42ebc4 100%);
+    padding-top: 36px;
+    padding-bottom: 36px;
+  }
+
+  #shopify-section-{{ section.id }} .mqs__track {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    will-change: transform;
+    animation: mqs-scroll-{{ section.id }} {{ section.settings.speed }}s linear infinite;
+  }
+
+  #shopify-section-{{ section.id }} .mqs__track:hover {
+    animation-play-state: {% if section.settings.pause_on_hover %}paused{% else %}running{% endif %};
+  }
+
+  @keyframes mqs-scroll-{{ section.id }} {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  #shopify-section-{{ section.id }} .mqs__item {
+    display: inline-block;
+    padding: 0 var(--mqs-gap, 64px);
+    font-family: var(--font-display);
+    font-size: {{ section.settings.font_size }}px;
+    font-weight: 400;
+    color: #ffffff;
+    white-space: nowrap;
+    line-height: 1;
+  }
+{% endstyle %}
+
+<div class="mqs">
+  <div class="mqs__track" aria-hidden="false">
+
+    {%- comment -%} First pass {%- endcomment -%}
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'item' -%}
+        <span class="mqs__item" {{ block.shopify_attributes }}>{{ block.settings.text }}</span>
+      {%- endif -%}
+    {%- endfor -%}
+
+    {%- comment -%} Duplicate pass — seamless loop (aria-hidden so screen readers skip) {%- endcomment -%}
+    <span aria-hidden="true" style="display:contents;">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'item' -%}
+          <span class="mqs__item">{{ block.settings.text }}</span>
+        {%- endif -%}
+      {%- endfor -%}
+    </span>
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Marquee strip",
+  "tag": "section",
+  "class": "section-marquee-strip",
+  "settings": [
+    {
+      "type": "range",
+      "id": "speed",
+      "label": "Scroll speed",
+      "info": "Duration in seconds — lower = faster",
+      "min": 8,
+      "max": 60,
+      "step": 2,
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "label": "Font size (px)",
+      "min": 12,
+      "max": 28,
+      "step": 1,
+      "default": 16
+    },
+    {
+      "type": "checkbox",
+      "id": "pause_on_hover",
+      "label": "Pause on hover",
+      "default": false
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Marquee item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "make the good fight good fun"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Marquee strip",
+      "blocks": [
+        { "type": "item", "settings": { "text": "make the good fight good fun" } },
+        { "type": "item", "settings": { "text": "method for change" } },
+        { "type": "item", "settings": { "text": "make the good fight good fun" } },
+        { "type": "item", "settings": { "text": "method for change" } },
+        { "type": "item", "settings": { "text": "make the good fight good fun" } },
+        { "type": "item", "settings": { "text": "method for change" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

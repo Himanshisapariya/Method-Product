@@ -1,0 +1,37 @@
+<a
+  href="{{ product.url }}"
+  class="group block transition duration-300 hover:-translate-y-2"
+>
+
+  <div class="overflow-hidden rounded-[32px] bg-[#f7f7f7]">
+
+    {% if product.featured_image %}
+      <img
+        src="{{ product.featured_image | image_url: width: 700 }}"
+        alt="{{ product.featured_image.alt | escape }}"
+        width="{{ product.featured_image.width }}"
+        height="{{ product.featured_image.height }}"
+        loading="lazy"
+       class="aspect-square w-full object-cover transition duration-500 group-hover:scale-110"
+      >
+    {% endif %}
+
+  </div>
+
+  <div class="mt-6 flex flex-col items-center text-center">
+
+    <h5 class="mb-2">
+      {{ product.title }}
+    </h5>
+
+    <p class="mb-6 text-[18px]">
+      {{ product.price | money }}
+    </p>
+
+    <span class="btn btn-secondary">
+      shop now
+    </span>
+
+  </div>
+
+</a>

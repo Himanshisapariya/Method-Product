@@ -12,26 +12,35 @@
   color: var(--color-ink-soft);
 }
 
-/* card row */
+/* card row — cards sit stacked on top of each other (negative overlap),
+   each later card painting over the previous one at rest */
 .hover-cards-row {
   border-radius: 2rem;
+  padding-left: 4px; /* room for first card's shadow */
 }
 
 .hover-card {
   position: relative;
   flex: 1 1 0;
+  max-width: 360px;
   min-width: 0;
   height: 420px;
   border-radius: 2rem;
   overflow: hidden;
   display: block;
   text-decoration: none;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.18);
   transition:
     flex-grow 0.55s cubic-bezier(0.22, 1, 0.36, 1),
     transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
     box-shadow 0.55s ease,
     filter 0.4s ease;
+}
+
+/* overlap: each card after the first pulls left and sits on top
+   of the previous one in normal paint order */
+.hover-card + .hover-card {
+  margin-left: -64px;
 }
 
 .hover-card__img {
@@ -73,33 +82,23 @@
   text-overflow: ellipsis;
 }
 
-.pill-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: #ffffff;
-  color: var(--color-brand-purple-btn);
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 0.95rem;
-  padding: 12px 22px;
-  border-radius: 999px;
-  white-space: nowrap;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-}
+/* button now uses global .btn .btn-secondary classes (application.css) —
+   no custom button styling needed here */
 
 /* THE HOVER ANIMATION
-   Hovered card grows + lifts; siblings settle down and dim slightly. */
+   At rest, cards overlap in a stack (each later card sits on top of the
+   one before it). On hover, that card straightens forward: it grows,
+   lifts up, and is forced above every other card via z-index — even if
+   it's earlier in the stack and would normally sit behind its neighbors. */
 .hover-card:hover {
-  flex-grow: 2.6;
-  transform: translateY(-24px);
-  box-shadow: 0 28px 48px rgba(0, 0, 0, 0.28);
-  z-index: 5;
+  flex-grow: 1.6;
+  transform: translateY(-24px) rotate(3deg);
+  box-shadow: 0 32px 56px rgba(0, 0, 0, 0.32);
+  z-index: 20;
 }
 
 .hover-cards-row:hover .hover-card:not(:hover) {
-  transform: translateY(10px);
-  filter: brightness(0.85);
+  filter: brightness(0.9);
 }
 
 /* mobile: horizontal scroll, no expand-on-hover (touch has no hover) */
