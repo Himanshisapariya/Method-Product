@@ -13,6 +13,38 @@
 @source "../assets/**/*.js";
 
 /* --------------------------------------------------------------------------
+   TAILWIND THEME — registers tokens as utility classes
+   bg-brand-purple, text-ink, font-display, border-brand-navy, etc.
+   -------------------------------------------------------------------------- */
+@theme {
+  /* Colors */
+  --color-ink: #414042;
+  --color-ink-soft: #707070;
+  --color-paper: #ffffff;
+  --color-paper-alt: #fafafa;
+  --color-white: #ffffff;
+  --color-brand-purple: #7800bf;
+  --color-brand-purple-deep: #4d0084;
+  --color-brand-purple-btn: #5e008f;
+  --color-brand-navy: #27323f;
+  --color-brand-teal: #007a7d;
+  --color-border: #e6e6e6;
+  --color-focus: #7800bf;
+
+  /* Fonts — generates font-sans, font-display, font-display-method */
+  --font-sans: "Haffer", Helvetica, Arial, sans-serif;
+  --font-display: "Haffer XH", Helvetica, Arial, sans-serif;
+  --font-display-method: "Haffer XH method", "Haffer XH", Helvetica, Arial, sans-serif;
+
+  /* Breakpoints */
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1460px;
+}
+
+/* --------------------------------------------------------------------------
    0. FONT FACES — mirrors methodproducts.com exactly
    -------------------------------------------------------------------------- */
 
@@ -74,33 +106,10 @@
    1. DESIGN TOKENS
    -------------------------------------------------------------------------- */
 :root {
-  /* ---- Brand color palette ---- */
-  --color-ink: #414042;             /* primary text (method's dark gray) */
-  --color-ink-soft: #707070;        /* secondary/muted text */
-  --color-paper: #ffffff;           /* page background */
-  --color-paper-alt: #fafafa;       /* secondary section background */
-  --color-white: #ffffff;
-
-  --color-brand-purple: #7800bf;    /* primary accent — focus, stars, links */
-  --color-brand-purple-deep: #4D0084; /* hover/active purple */
-  --color-brand-purple-btn: #5E008F;  /* secondary button bg */
-  --color-brand-navy: #27323f;      /* primary button bg */
-  --color-brand-teal: #007a7d;      /* secondary button / teal accent */
-
-  /* Method masterbrand gradient */
+  /* Gradients — not Tailwind utilities, CSS-only */
   --gradient-brand: linear-gradient(108.63deg, #d80e80 16.74%, #7800bf 33.38%, #5447d6 51.86%, #287ab8 68.1%, #007a7d 81.13%);
   --gradient-masterbrand: linear-gradient(269deg, #00D2B1 -10.17%, #009CDD 17.71%, #9526F0 59.81%, #B408E5 99.27%);
   --gradient-hero: linear-gradient(87.89deg, #D638C4 -8.18%, #9138E5 29.6%, #4275E9 62.51%, #00BCE5 85.67%, #0AD6B8 105.17%);
-
-  --color-border: #e6e6e6;
-  --color-focus: #7800bf;
-
-  /* ---- Typography ----
-     Haffer = body/UI sans
-     Haffer XH = display/headings sans (wider, heavier optical weight) */
-  --font-sans: "Haffer", Helvetica, Arial, sans-serif;
-  --font-display: "Haffer XH", Helvetica, Arial, sans-serif;
-  --font-display-method: "Haffer XH method", "Haffer XH", Helvetica, Arial, sans-serif;
 
   /* Type scale — matches method's named text styles */
   --fs-xs: 0.75rem;       /* 12px */
@@ -140,10 +149,32 @@
 
   /* Spacing */
   --space-section-y: clamp(3rem, 6vw, 6rem);
-  --container-max: 1460px;    /* matches method's --container-width-md */
-  --container-max-sm: 1100px; /* matches method's --container-width-sm */
-  --container-pad: clamp(1rem, var(--gutter, 36px), 2.5rem);
+
+  /* Gutter */
   --gutter: 36px;
+
+  /* Container width definitions — mirrors methodproducts.com exactly */
+  --container-width-fullwidth: 0px;
+  --container-width-xs: 640px;
+  --container-width-sm: 1100px;
+  --container-width-md: 1460px;
+  --container-width-lg: 1600px;
+
+  /* Scrollbar-aware viewport width */
+  --100vw-no-scrollbar: calc(100vw - var(--scrollbar-width, 19px));
+
+  /* Computed container padding (side gutters) — use as padding-inline on full-width elements */
+  --container-fullwidth: max(calc((var(--100vw-no-scrollbar) - var(--container-width-fullwidth)) / 2), var(--gutter));
+  --container-xs:        max(calc((var(--100vw-no-scrollbar) - var(--container-width-xs))        / 2), var(--gutter));
+  --container-sm:        max(calc((var(--100vw-no-scrollbar) - var(--container-width-sm))        / 2), var(--gutter));
+  --container-md:        max(calc((var(--100vw-no-scrollbar) - var(--container-width-md))        / 2), var(--gutter));
+  --container-lg:        max(calc((var(--100vw-no-scrollbar) - var(--container-width-lg))        / 2), var(--gutter));
+
+  /* Vertical centering helper */
+  --layout-y-container:  max(calc((100vh - 878px) / 2), var(--gutter));
+
+  /* Legacy alias — small gutter for existing code */
+  --container-pad: var(--gutter);
 
   /* Shadows — method uses soft drop shadow on buttons */
   --shadow-btn: 0 4px 16px rgba(0, 0, 0, 0.12);
@@ -261,7 +292,7 @@
   @media (min-width: 1024px) {
     h1 { font-size: 5rem; }      /* 80px */
     h2 { font-size: 4rem; }      /* 64px */
-    h3 { font-size: 3rem; }      /* 48px */
+    h3 { font-size: 2.5rem; }    /* 40px */
     h4 { font-size: 2.25rem; }   /* 36px */
     h5 { font-size: 1.75rem; }   /* 28px */
     h6 { font-size: 1.25rem; }   /* 20px */
@@ -299,15 +330,35 @@
    -------------------------------------------------------------------------- */
 @layer components {
 
-  /* Layout shell */
+  /* --------------------------------------------------------------------------
+     Container classes — full-width elements with responsive side padding
+     Usage: <div class="container-sm"> fills max 1100px centered, guttered
+     -------------------------------------------------------------------------- */
+  .container-fullwidth,
+  .container-xs,
+  .container-sm,
+  .container-md,
+  .container-lg {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .container-fullwidth { padding-inline: var(--container-fullwidth); }
+  .container-xs        { padding-inline: var(--container-xs); }
+  .container-sm        { padding-inline: var(--container-sm); }
+  .container-md        { padding-inline: var(--container-md); }
+  .container-lg        { padding-inline: var(--container-lg); }
+
+  /* Legacy alias */
   .container-site {
     display: block;
     margin-left: auto;
     margin-right: auto;
     width: 100%;
-    max-width: var(--container-max);
-    padding-left: var(--container-pad);
-    padding-right: var(--container-pad);
+    max-width: var(--container-width-md);
+    padding-left: var(--container-sm);
+    padding-right: var(--container-sm);
   }
 
   .section {

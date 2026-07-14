@@ -1,73 +1,70 @@
 {{ 'section-featured-cards.css' | asset_url | stylesheet_tag }}
 
 <section class="featured-cards section section--padding py-12 md:py-20">
-  <div class="page-width">
+  <div class="container-md">
 
     {% if section.settings.heading != blank %}
-      <h2 class="text-center mb-8 md:mb-12">
+      <h3 class="text-center mb-8 md:mb-12">
         {{ section.settings.heading }}
-      </h2>
+      </h3>
     {% endif %}
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
 
       {% for block in section.blocks %}
         <article
-          class="relative overflow-hidden rounded-[2rem] min-h-[560px] md:min-h-[680px]"
+          class="relative overflow-hidden rounded-[2rem]"
           {{ block.shopify_attributes }}
         >
 
-          {% comment %} Desktop image {% endcomment %}
+          {% comment %} Desktop image — block element, square aspect ratio defines card height {% endcomment %}
           {% if block.settings.image != blank %}
             <img
-              class="hidden md:block absolute inset-0 w-full h-full object-cover"
+              class="hidden md:block w-full aspect-square object-cover"
               src="{{ block.settings.image | image_url: width: 1200 }}"
               alt="{{ block.settings.image.alt | escape }}"
-              width="{{ block.settings.image.width }}"
-              height="{{ block.settings.image.height }}"
               loading="lazy"
             >
           {% endif %}
 
-          {% comment %} Mobile image (falls back to desktop image if none set) {% endcomment %}
+          {% comment %} Mobile image — portrait aspect ratio {% endcomment %}
           {% if block.settings.mobile_image != blank or block.settings.image != blank %}
             <img
-              class="block md:hidden absolute inset-0 w-full h-full object-cover"
+              class="block md:hidden w-full aspect-[10/21] object-cover object-bottom"
               src="{{ block.settings.mobile_image | default: block.settings.image | image_url: width: 800 }}"
               alt="{{ block.settings.mobile_image.alt | default: block.settings.image.alt | escape }}"
-              width="{{ block.settings.mobile_image.width | default: block.settings.image.width }}"
-              height="{{ block.settings.mobile_image.height | default: block.settings.image.height }}"
               loading="lazy"
             >
           {% endif %}
 
-          <div class="relative z-10 flex flex-col h-full w-full
-                      items-center justify-center text-center
-                      md:items-start md:justify-start md:text-left
-                      p-8 md:p-12">
+          {% comment %} Content — absolutely positioned over image {% endcomment %}
+          <div class="absolute top-0 left-0 right-0 bottom-0
+                      flex flex-col justify-start items-center text-center px-4 pt-8
+                      md:justify-center md:items-start md:text-left
+                      md:top-[64px] md:bottom-[64px] md:left-[40px] md:right-auto md:px-0 md:pt-0">
 
-            <div class="w-full md:max-w-[52%] flex flex-col items-center md:items-start text-center md:text-left">
+            <div class="w-full md:w-[360px] flex flex-col items-center md:items-start text-center md:text-left">
 
               {% if block.settings.badge != blank %}
-                <div class="inline-flex items-center justify-center px-4 py-[0.45rem] mb-6 border-2 border-[#6622cc] rounded-full bg-white/90 font-bold leading-none text-[#6622cc]">
+                <div class="inline-flex items-center justify-center px-4 py-[0.45rem] mb-5 border-2 border-[var(--color-brand-purple)] rounded-full bg-white/90 font-bold leading-none text-[var(--color-brand-purple)] text-sm">
                   {{ block.settings.badge }}
                 </div>
               {% endif %}
 
               {% if block.settings.heading != blank %}
-                <h3 class="text-[28px] md:text-[32px] font-bold mb-4 leading-[1.1]">
+                <h3 class="mb-4">
                   {{ block.settings.heading }}
                 </h3>
               {% endif %}
 
               {% if block.settings.text != blank %}
-                <div class="mb-6 leading-normal max-w-[26rem] md:max-w-[30rem]">
+                <div class="mb-6">
                   {{ block.settings.text }}
                 </div>
               {% endif %}
 
               {% if block.settings.button_label != blank %}
-                <a href="{{ block.settings.button_link | default: '#' }}" class="btn btn-secondary">
+                <a href="{{ block.settings.button_link | default: '#' }}" class="btn btn-primary">
                   {{ block.settings.button_label }}
                 </a>
               {% endif %}
