@@ -201,6 +201,70 @@
         "subtext": "your skin deserves a regimen built for you. browse our bundles to create your custom routine."
       }
     },
+    "show_me_products_twdUJ4": {
+      "type": "show-me-products",
+      "blocks": {
+        "review_card_LfPDte": {
+          "type": "review_card",
+          "settings": {
+            "product": "",
+            "image": "shopify://shop_images/image_ratios_6.webp",
+            "button_link": "",
+            "review_title": "so moisturized",
+            "review_quote": "\"i love this product... it has never felt so healthy and nourished!\" -teef8",
+            "button_label": "shop now"
+          }
+        },
+        "review_card_zwftEY": {
+          "type": "review_card",
+          "settings": {
+            "product": "",
+            "image": "shopify://shop_images/addictive.webp",
+            "button_link": "",
+            "review_title": "so moisturized",
+            "review_quote": "\"i love this product... it has never felt so healthy and nourished!\" -teef8",
+            "button_label": "shop now"
+          }
+        },
+        "review_card_RqjGRb": {
+          "type": "review_card",
+          "settings": {
+            "product": "",
+            "image": "shopify://shop_images/my-goto.webp",
+            "button_link": "",
+            "review_title": "so moisturized",
+            "review_quote": "\"i love this product... it has never felt so healthy and nourished!\" -teef8",
+            "button_label": "shop now"
+          }
+        },
+        "review_card_rAqRjX": {
+          "type": "review_card",
+          "settings": {
+            "product": "",
+            "image": "shopify://shop_images/amazing.webp",
+            "button_link": "",
+            "review_title": "so moisturized",
+            "review_quote": "\"i love this product... it has never felt so healthy and nourished!\" -teef8",
+            "button_label": "shop now"
+          }
+        }
+      },
+      "block_order": [
+        "review_card_LfPDte",
+        "review_card_zwftEY",
+        "review_card_RqjGRb",
+        "review_card_rAqRjX"
+      ],
+      "name": "Show me products",
+      "settings": {
+        "eyebrow": "it seems our suds are something of a scent-sation",
+        "heading": "our fave raves",
+        "overlay_opacity": 30,
+        "bg_start": "#d80e80",
+        "bg_mid": "#7800bf",
+        "bg_end": "#4d0084"
+      }
+    },
     "marquee_strip_Y4jipa": {
       "type": "marquee-strip",
       "blocks": {
@@ -327,7 +391,8 @@
     "feature_cards_VQiKCy",
     "best_seller_carousel_kJTHP9",
     "product_bundles_EpTDix",
-    "marquee_strip_Y4jipa",
-    "hover_cards_96rMq7"
+    "hover_cards_96rMq7",
+    "show_me_products_twdUJ4",
+    "marquee_strip_Y4jipa"
   ]
 }
