@@ -200,6 +200,125 @@
         "heading": "shop bundles for your skin needs",
         "subtext": "your skin deserves a regimen built for you. browse our bundles to create your custom routine."
       }
+    },
+    "marquee_strip_Y4jipa": {
+      "type": "marquee-strip",
+      "blocks": {
+        "item_rEPeVn": {
+          "type": "item",
+          "settings": {
+            "text": "make the good fight good fun"
+          }
+        },
+        "item_N4tkdc": {
+          "type": "item",
+          "settings": {
+            "text": "method for change"
+          }
+        },
+        "item_xLxaCg": {
+          "type": "item",
+          "settings": {
+            "text": "make the good fight good fun"
+          }
+        },
+        "item_kHBPyW": {
+          "type": "item",
+          "settings": {
+            "text": "method for change"
+          }
+        },
+        "item_mdVtWq": {
+          "type": "item",
+          "settings": {
+            "text": "make the good fight good fun"
+          }
+        },
+        "item_ReR6FR": {
+          "type": "item",
+          "settings": {
+            "text": "method for change"
+          }
+        }
+      },
+      "block_order": [
+        "item_rEPeVn",
+        "item_N4tkdc",
+        "item_xLxaCg",
+        "item_kHBPyW",
+        "item_mdVtWq",
+        "item_ReR6FR"
+      ],
+      "name": "Marquee strip",
+      "settings": {
+        "speed": 24,
+        "font_size": 16,
+        "pause_on_hover": false
+      }
+    },
+    "hover_cards_96rMq7": {
+      "type": "hover-cards",
+      "blocks": {
+        "card_GUQ9LQ": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/gradient-are-so-spa-core_a7d0978b-dc8a-4161-9150-885b9841c5be.webp",
+            "heading": "are so spa core",
+            "button_label": "view products",
+            "link": ""
+          }
+        },
+        "card_XFUFJW": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/gradient-shower-me-earthy_908cbed8-81fe-4f63-b5d1-0adb7b3c7247.webp",
+            "heading": "are so spa core",
+            "button_label": "view products",
+            "link": ""
+          }
+        },
+        "card_tpqicp": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/gradient-smells-like-a-vacation_7825f5e5-2d54-4c9a-b6e8-60f649714aeb.webp",
+            "heading": "are so spa core",
+            "button_label": "view products",
+            "link": ""
+          }
+        },
+        "card_LK4rpm": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/gradient-tickle-me-pink_fb5343bc-dae0-4748-8251-928d002f935b.webp",
+            "heading": "are so spa core",
+            "button_label": "view products",
+            "link": ""
+          }
+        },
+        "card_nHg3Gp": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/gradient-pump-with-purpose_b2f99c1c-6cbd-4138-a25e-51441f3a84b9.webp",
+            "heading": "are so spa core",
+            "button_label": "view products",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "card_GUQ9LQ",
+        "card_XFUFJW",
+        "card_tpqicp",
+        "card_LK4rpm",
+        "card_nHg3Gp"
+      ],
+      "name": "hover cards",
+      "settings": {
+        "eyebrow": "explore our collections",
+        "heading": "show me products that...",
+        "button_label": "view all collections",
+        "button_link": ""
+      }
     }
   },
   "order": [
@@ -207,6 +326,8 @@
     "hero_banner_HkGVLA",
     "feature_cards_VQiKCy",
     "best_seller_carousel_kJTHP9",
-    "product_bundles_EpTDix"
+    "product_bundles_EpTDix",
+    "marquee_strip_Y4jipa",
+    "hover_cards_96rMq7"
   ]
 }
