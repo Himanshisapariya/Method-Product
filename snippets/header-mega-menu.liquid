@@ -1,15 +1,47 @@
 {% comment %}
   Renders a megamenu for the header.
 
+  Layout:
+  ┌──────────────────────────────────────────────────────────────┐
+  │  LEFT SIDEBAR (shared)  │  LINK COLUMNS  │  FEATURE IMAGE   │
+  │  sidebar_item blocks    │  child links   │  mega_menu block  │
+  └──────────────────────────────────────────────────────────────┘
+
+  The sidebar is built from "sidebar_item" blocks defined in the
+  header section schema — shared across every open megamenu.
+
+  Each "mega_menu" block targets one top-level nav link by
+  matching block.settings.menu_title to link.title. That block
+  supplies the right-side image + heading + link.
+
   Usage:
   {% render 'header-mega-menu' %}
 {% endcomment %}
+
+{% comment %} Pre-collect sidebar_item blocks {% endcomment %}
+{% assign sidebar_blocks = '' %}
 
 <nav class="header__inline-menu">
   <ul class="list-menu list-menu--inline" role="list">
     {%- for link in section.settings.menu.links -%}
       <li>
         {%- if link.links != blank -%}
+
+          {%- comment -%}
+            Find the mega_menu block that matches this link title.
+            Comparison is case-insensitive via downcase.
+          {%- endcomment -%}
+          {%- assign mega_block = nil -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'mega_menu' -%}
+              {%- assign block_title_lower = block.settings.menu_title | downcase | strip -%}
+              {%- assign link_title_lower  = link.title | downcase | strip -%}
+              {%- if block_title_lower == link_title_lower -%}
+                {%- assign mega_block = block -%}
+              {%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+
           <header-menu>
             <details id="Details-HeaderMenu-{{ forloop.index }}" class="mega-menu">
               <summary
@@ -25,51 +57,116 @@
                 </span>
                 {{- 'icon-caret.svg' | inline_asset_content -}}
               </summary>
+
               <div
                 id="MegaMenu-Content-{{ forloop.index }}"
                 class="mega-menu__content color-{{ section.settings.menu_color_scheme }} gradient motion-reduce global-settings-popup"
                 tabindex="-1"
+                {% if mega_block %}{{ mega_block.shopify_attributes }}{% endif %}
               >
-                <ul
-                  class="mega-menu__list page-width{% if link.levels == 1 %} mega-menu__list--condensed{% endif %}"
-                  role="list"
-                >
-                  {%- for childlink in link.links -%}
-                    <li>
-                      <a
-                        id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}"
-                        href="{{ childlink.url }}"
-                        class="mega-menu__link mega-menu__link--level-2 link{% if childlink.current %} mega-menu__link--active{% endif %}"
-                        {% if childlink.current %}
-                          aria-current="page"
-                        {% endif %}
-                      >
-                        {{ childlink.title | escape }}
-                      </a>
-                      {%- if childlink.links != blank -%}
-                        <ul class="list-unstyled" role="list">
-                          {%- for grandchildlink in childlink.links -%}
-                            <li>
-                              <a
-                                id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}-{{ grandchildlink.handle }}"
-                                href="{{ grandchildlink.url }}"
-                                class="mega-menu__link link{% if grandchildlink.current %} mega-menu__link--active{% endif %}"
-                                {% if grandchildlink.current %}
-                                  aria-current="page"
-                                {% endif %}
-                              >
-                                {{ grandchildlink.title | escape }}
-                              </a>
-                            </li>
-                          {%- endfor -%}
-                        </ul>
+                <div class="custom-mega-menu">
+
+                  {%- comment -%} ── LEFT SIDEBAR — shared across all megamenus ── {%- endcomment -%}
+                  <aside class="custom-mega-sidebar">
+                    <ul>
+                      {%- for block in section.blocks -%}
+                        {%- if block.type == 'sidebar_item' -%}
+                          <li {{ block.shopify_attributes }}>
+                            <a
+                              href="{{ block.settings.link | default: '#' }}"
+                              class="mega-sidebar__link"
+                            >
+                              {%- if block.settings.icon != blank -%}
+                                {%- comment -%} Image icon — uploaded asset {%- endcomment -%}
+                                <span class="mega-sidebar__icon mega-sidebar__icon--img">
+                                  {{
+                                    block.settings.icon
+                                    | image_url: width: 40
+                                    | image_tag: loading: 'lazy', alt: block.settings.title
+                                  }}
+                                </span>
+                              {%- elsif block.settings.icon_emoji != blank -%}
+                                {%- comment -%} Emoji / text icon fallback {%- endcomment -%}
+                                <span class="mega-sidebar__icon mega-sidebar__icon--emoji" aria-hidden="true">
+                                  {{ block.settings.icon_emoji }}
+                                </span>
+                              {%- endif -%}
+                              <span class="mega-sidebar__label">{{ block.settings.title | escape }}</span>
+                            </a>
+                          </li>
+                        {%- endif -%}
+                      {%- endfor -%}
+                    </ul>
+                  </aside>
+
+                  {%- comment -%} ── LINK COLUMNS — unique per megamenu ── {%- endcomment -%}
+                  <div class="custom-mega-links">
+                    <ul class="mega-menu__list{% if link.levels == 1 %} mega-menu__list--condensed{% endif %}">
+                      {%- for childlink in link.links -%}
+                        <li>
+                          <a
+                            href="{{ childlink.url }}"
+                            class="mega-menu__link mega-menu__link--level-2{% if childlink.current %} mega-menu__link--active{% endif %}"
+                          >
+                            {{ childlink.title }}
+                          </a>
+
+                          {%- if childlink.links != blank -%}
+                            <ul class="list-unstyled">
+                              {%- for grandchildlink in childlink.links -%}
+                                <li>
+                                  <a
+                                    href="{{ grandchildlink.url }}"
+                                    class="mega-menu__link{% if grandchildlink.current %} mega-menu__link--active{% endif %}"
+                                  >
+                                    {{ grandchildlink.title }}
+                                  </a>
+                                </li>
+                              {%- endfor -%}
+                            </ul>
+                          {%- endif -%}
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+                  </div>
+
+                  {%- comment -%} ── FEATURE IMAGE — from matching mega_menu block ── {%- endcomment -%}
+                  {%- if mega_block -%}
+                    <div class="custom-mega-image">
+
+                      {%- if mega_block.settings.image_link != blank -%}
+                        <a href="{{ mega_block.settings.image_link }}" class="mega-image-link">
                       {%- endif -%}
-                    </li>
-                  {%- endfor -%}
-                </ul>
+
+                      {%- if mega_block.settings.image != blank -%}
+                        {{
+                          mega_block.settings.image
+                          | image_url: width: 500
+                          | image_tag:
+                            loading: 'lazy',
+                            class: 'mega-image-img',
+                            alt: mega_block.settings.image_heading | default: link.title
+                        }}
+                      {%- endif -%}
+
+                      {%- if mega_block.settings.image_heading != blank -%}
+                        <div class="mega-image-heading">
+                          {{ mega_block.settings.image_heading }}
+                        </div>
+                      {%- endif -%}
+
+                      {%- if mega_block.settings.image_link != blank -%}
+                        </a>
+                      {%- endif -%}
+
+                    </div>
+                  {%- endif -%}
+
+                </div>
               </div>
             </details>
           </header-menu>
+
         {%- else -%}
           <a
             id="HeaderMenu-{{ link.handle }}"

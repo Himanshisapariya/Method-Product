@@ -1,0 +1,80 @@
+{% comment %}
+  Renders one product/variant card for the color wheel picker.
+  Expected variables (passed in via `render ... with` / explicit params):
+    card_hue          - number, 0-360, wheel position this card matches
+    card_label        - string, shown in "your happy place is: ___"
+    card_title        - string
+    card_price        - string, already formatted (e.g. via `| money`)
+    card_image        - image object or image URL string
+    card_url          - string
+    card_rating       - number 0-5
+    card_review_count - number
+    card_badge        - string, optional
+    card_button_label - string
+    form_product      - product object, required if you want a working add-to-cart form
+    form_variant_id   - number, the exact variant id to add to cart
+{% endcomment %}
+
+<div
+  class="group shrink-0 w-[220px] sm:w-[240px] snap-start flex flex-col items-center text-center transition-transform duration-200"
+  data-color-wheel-card
+  data-hue="{{ card_hue }}"
+  data-label="{{ card_label | escape }}"
+>
+  <a href="{{ card_url | default: '#' }}" class="block w-full aspect-square mb-4 rounded-2xl overflow-hidden bg-paper-alt flex items-center justify-center">
+    {% if card_image != blank %}
+      <img
+        src="{{ card_image | image_url: width: 400 }}"
+        alt="{{ card_title | escape }}"
+        loading="lazy"
+        width="400"
+        height="400"
+        class="w-full h-full object-contain object-center transition-transform duration-300 group-hover:scale-105"
+      >
+    {% else %}
+      <div class="w-16 h-16 rounded-full" style="background: hsl({{ card_hue }}, 70%, 55%);"></div>
+    {% endif %}
+  </a>
+
+  <div class="flex items-center gap-1 mb-1" aria-hidden="true">
+    {% for i in (1..5) %}
+      <svg width="14" height="14" viewBox="0 0 20 20" class="{% if i <= card_rating %}text-brand-purple{% else %}text-border{% endif %}" fill="currentColor">
+        <path d="M10 1l2.6 5.5 6 .7-4.4 4.2 1.1 6-5.3-2.9-5.3 2.9 1.1-6L1.4 7.2l6-.7L10 1z"/>
+      </svg>
+    {% endfor %}
+    {% if card_review_count > 0 %}
+      <span class="text-xs text-ink-soft ml-1">({{ card_review_count }})</span>
+    {% endif %}
+  </div>
+
+  {% if card_badge != blank %}
+    <span class="text-xs font-semibold text-brand-teal mb-1">{{ card_badge }}</span>
+  {% endif %}
+
+  <a href="{{ card_url | default: '#' }}" class="text-ink text-sm leading-snug mb-1 hover:text-brand-purple-deep">
+    {{ card_title }}
+  </a>
+
+  {% if card_price != blank %}
+    <p class="text-ink font-semibold mb-3">{{ card_price }}</p>
+  {% endif %}
+
+  {% if form_product != blank %}
+    {% form 'product', form_product %}
+      <input type="hidden" name="id" value="{{ form_variant_id | default: form_product.selected_or_first_available_variant.id }}">
+      <button
+        type="submit"
+        class="w-full max-w-[180px] mx-auto rounded-full border-[1.5px] border-brand-purple text-brand-purple text-sm font-medium py-2.5 px-6 hover:bg-brand-purple hover:text-white transition-colors"
+      >
+        {{ card_button_label | default: 'add to cart' }}
+      </button>
+    {% endform %}
+  {% else %}
+    <a
+      href="{{ card_url | default: '#' }}"
+      class="w-full max-w-[180px] mx-auto rounded-full border-[1.5px] border-brand-purple text-brand-purple text-sm font-medium py-2.5 px-6 hover:bg-brand-purple hover:text-white transition-colors"
+    >
+      {{ card_button_label | default: 'add to cart' }}
+    </a>
+  {% endif %}
+</div>

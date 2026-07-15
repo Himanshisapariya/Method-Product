@@ -12,6 +12,11 @@
   <link rel="stylesheet" href="{{ 'component-price.css' | asset_url }}" media="print" onload="this.media='all'">
 {%- endif -%}
 
+
+
+
+
+
 {%- if section.settings.menu_type_desktop == 'mega' -%}
   <link rel="stylesheet" href="{{ 'component-mega-menu.css' | asset_url }}" media="print" onload="this.media='all'">
 {%- endif -%}
@@ -180,15 +185,159 @@
       {%- endif -%}
     {%- endif -%}
 
-    {%- liquid
-      if section.settings.menu != blank
-        if section.settings.menu_type_desktop == 'dropdown'
-          render 'header-dropdown-menu'
-        elsif section.settings.menu_type_desktop != 'drawer'
-          render 'header-mega-menu'
-        endif
-      endif
-    %}
+    {%- if section.settings.menu != blank -%}
+      {%- if section.settings.menu_type_desktop == 'dropdown' -%}
+        {%- render 'header-dropdown-menu' -%}
+      {%- elsif section.settings.menu_type_desktop != 'drawer' -%}
+
+        {%- comment -%}
+          INLINE MEGAMENU — cannot use render snippet because section.blocks
+          is not accessible inside a render tag in Shopify.
+
+          Layout:
+          ┌──────────────────────────────────────────────────────────────┐
+          │  LEFT SIDEBAR (sidebar_item blocks, shared across all menus) │
+          │  LINK COLUMNS (child links of each top nav item)             │
+          │  FEATURE IMAGE (mega_menu block matched by menu_title)       │
+          └──────────────────────────────────────────────────────────────┘
+        {%- endcomment -%}
+
+        <nav class="header__inline-menu">
+          <ul class="list-menu list-menu--inline" role="list">
+            {%- for link in section.settings.menu.links -%}
+              <li>
+                {%- if link.links != blank -%}
+
+                  {%- comment -%} Find the mega_menu block that matches this link (case-insensitive) {%- endcomment -%}
+                  {%- assign mega_block = nil -%}
+                  {%- for block in section.blocks -%}
+                    {%- if block.type == 'mega_menu' -%}
+                      {%- assign _btl = block.settings.menu_title | downcase | strip -%}
+                      {%- assign _ltl = link.title | downcase | strip -%}
+                      {%- if _btl == _ltl -%}
+                        {%- assign mega_block = block -%}
+                      {%- endif -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+
+                  <header-menu>
+                    <details id="Details-HeaderMenu-{{ forloop.index }}" class="mega-menu">
+                      <summary
+                        id="HeaderMenu-{{ link.handle }}"
+                        class="header__menu-item list-menu__item link focus-inset"
+                      >
+                        <span{% if link.child_active %} class="header__active-menu-item"{% endif %}>
+                          {{- link.title | escape -}}
+                        </span>
+                        {{- 'icon-caret.svg' | inline_asset_content -}}
+                      </summary>
+
+                      <div
+                        id="MegaMenu-Content-{{ forloop.index }}"
+                        class="mega-menu__content color-{{ section.settings.menu_color_scheme }} gradient motion-reduce global-settings-popup"
+                        tabindex="-1"
+                        {% if mega_block %}{{ mega_block.shopify_attributes }}{% endif %}
+                      >
+                        <div class="custom-mega-menu">
+
+                          {%- comment -%} ── LEFT SIDEBAR — sidebar_item blocks, same in every megamenu ── {%- endcomment -%}
+                          <aside class="custom-mega-sidebar">
+                            <ul>
+                              {%- for block in section.blocks -%}
+                                {%- if block.type == 'sidebar_item' -%}
+                                  <li {{ block.shopify_attributes }}>
+                                    <a href="{{ block.settings.link | default: '#' }}" class="mega-sidebar__link">
+                                      {%- if block.settings.icon != blank -%}
+                                        <span class="mega-sidebar__icon mega-sidebar__icon--img">
+                                          {{- block.settings.icon | image_url: width: 40 | image_tag: loading: 'lazy', alt: block.settings.title -}}
+                                        </span>
+                                      {%- elsif block.settings.icon_emoji != blank -%}
+                                        <span class="mega-sidebar__icon mega-sidebar__icon--emoji" aria-hidden="true">{{ block.settings.icon_emoji }}</span>
+                                      {%- endif -%}
+                                      <span class="mega-sidebar__label">{{ block.settings.title | escape }}</span>
+                                    </a>
+                                  </li>
+                                {%- endif -%}
+                              {%- endfor -%}
+                            </ul>
+                          </aside>
+
+                          {%- comment -%} ── LINK COLUMNS — unique per megamenu ── {%- endcomment -%}
+                          <div class="custom-mega-links">
+                            <ul class="mega-menu__list{% if link.levels == 1 %} mega-menu__list--condensed{% endif %}">
+                              {%- for childlink in link.links -%}
+                                <li>
+                                  <a
+                                    href="{{ childlink.url }}"
+                                    class="mega-menu__link mega-menu__link--level-2{% if childlink.current %} mega-menu__link--active{% endif %}"
+                                  >{{ childlink.title }}</a>
+                                  {%- if childlink.links != blank -%}
+                                    <ul class="list-unstyled">
+                                      {%- for grandchildlink in childlink.links -%}
+                                        <li>
+                                          <a
+                                            href="{{ grandchildlink.url }}"
+                                            class="mega-menu__link{% if grandchildlink.current %} mega-menu__link--active{% endif %}"
+                                          >{{ grandchildlink.title }}</a>
+                                        </li>
+                                      {%- endfor -%}
+                                    </ul>
+                                  {%- endif -%}
+                                </li>
+                              {%- endfor -%}
+                            </ul>
+                          </div>
+
+                          {%- comment -%} ── FEATURE IMAGE — from the matching mega_menu block ── {%- endcomment -%}
+                          {%- if mega_block != nil -%}
+                            <div class="custom-mega-image">
+                              {%- if mega_block.settings.image_link != blank -%}
+                                <a href="{{ mega_block.settings.image_link }}" class="mega-image-link">
+                              {%- endif -%}
+                              {%- if mega_block.settings.image != blank -%}
+                                {{
+                                  mega_block.settings.image
+                                  | image_url: width: 500
+                                  | image_tag:
+                                    loading: 'lazy',
+                                    class: 'mega-image-img',
+                                    alt: mega_block.settings.image_heading | default: link.title
+                                }}
+                              {%- endif -%}
+                              {%- if mega_block.settings.image_heading != blank -%}
+                                <div class="mega-image-heading">{{ mega_block.settings.image_heading }}</div>
+                              {%- endif -%}
+                              {%- if mega_block.settings.image_link != blank -%}
+                                </a>
+                              {%- endif -%}
+                            </div>
+                          {%- endif -%}
+
+                        </div>
+                      </div>
+                    </details>
+                  </header-menu>
+
+                {%- else -%}
+                  <a
+                    id="HeaderMenu-{{ link.handle }}"
+                    href="{{ link.url }}"
+                    class="header__menu-item list-menu__item link link--text focus-inset"
+                    {% if link.current %}aria-current="page"{% endif %}
+                  >
+                    <span{% if link.current %} class="header__active-menu-item"{% endif %}>
+                      {{- link.title | escape -}}
+                    </span>
+                  </a>
+                {%- endif -%}
+              </li>
+            {%- endfor -%}
+          </ul>
+        </nav>
+
+      {%- endif -%}
+    {%- endif -%}
+
 
     {%- if section.settings.logo_position == 'middle-center' -%}
       {%- if request.page_type == 'index' -%}
@@ -547,6 +696,12 @@
       "label": "t:sections.header.settings.menu.label"
     },
     {
+  "type": "link_list",
+  "id": "mega_sidebar_menu",
+  "label": "Mega Menu Sidebar"
+},
+
+    {
       "type": "select",
       "id": "menu_type_desktop",
       "options": [
@@ -676,10 +831,74 @@
       "default": 20
     }
   ],
-  "blocks": [
-    {
-      "type": "@app"
-    }
-  ]
+"blocks": [
+  {
+    "type": "@app"
+  },
+  {
+    "type": "mega_menu",
+    "name": "Mega Menu Block",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Add one Mega Menu block per top-level nav item. The Menu Name must exactly match the navigation link title to connect this block to the right dropdown."
+      },
+      {
+        "type": "text",
+        "id": "menu_title",
+        "label": "Menu Name (must match nav link exactly)",
+        "info": "e.g. 'body + hair' — case-insensitive match"
+      },
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Feature Image (right side)"
+      },
+      {
+        "type": "text",
+        "id": "image_heading",
+        "label": "Image Caption"
+      },
+      {
+        "type": "url",
+        "id": "image_link",
+        "label": "Image Link URL"
+      }
+    ]
+  },
+  {
+    "type": "sidebar_item",
+    "name": "Sidebar Link",
+    "limit": 10,
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Sidebar links appear on the left side of every megamenu. Add one block per link."
+      },
+      {
+        "type": "text",
+        "id": "icon_emoji",
+        "label": "Icon (emoji or symbol)",
+        "placeholder": "e.g. 🛍️",
+        "info": "Paste an emoji or symbol. Shown before the link label."
+      },
+      {
+        "type": "image_picker",
+        "id": "icon",
+        "label": "Icon Image (optional, overrides emoji)"
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Link Label"
+      },
+      {
+        "type": "url",
+        "id": "link",
+        "label": "Link URL"
+      }
+    ]
+  }
+]
 }
 {% endschema %}
