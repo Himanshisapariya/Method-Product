@@ -240,27 +240,94 @@
                       >
                         <div class="custom-mega-menu">
 
-                          {%- comment -%} ── LEFT SIDEBAR — sidebar_item blocks, same in every megamenu ── {%- endcomment -%}
+                          {%- comment -%} ── LEFT SIDEBAR — always shown, same in every megamenu ── {%- endcomment -%}
                           <aside class="custom-mega-sidebar">
                             <ul>
+
+                              {%- comment -%}
+                                Count sidebar_item blocks. If the merchant has added blocks, use those.
+                                If none are configured yet, fall back to hardcoded defaults so the
+                                sidebar always appears without any theme editor setup required.
+                              {%- endcomment -%}
+
+                              {%- assign sidebar_count = 0 -%}
                               {%- for block in section.blocks -%}
                                 {%- if block.type == 'sidebar_item' -%}
-                                  <li {{ block.shopify_attributes }}>
-                                    <a href="{{ block.settings.link | default: '#' }}" class="mega-sidebar__link">
-                                      {%- if block.settings.icon != blank -%}
-                                        <span class="mega-sidebar__icon mega-sidebar__icon--img">
-                                          {{- block.settings.icon | image_url: width: 40 | image_tag: loading: 'lazy', alt: block.settings.title -}}
-                                        </span>
-                                      {%- elsif block.settings.icon_emoji != blank -%}
-                                        <span class="mega-sidebar__icon mega-sidebar__icon--emoji" aria-hidden="true">{{ block.settings.icon_emoji }}</span>
-                                      {%- endif -%}
-                                      <span class="mega-sidebar__label">{{ block.settings.title | escape }}</span>
-                                    </a>
-                                  </li>
+                                  {%- assign sidebar_count = sidebar_count | plus: 1 -%}
                                 {%- endif -%}
                               {%- endfor -%}
+
+                              {%- if sidebar_count > 0 -%}
+
+                                {%- comment -%} Merchant-configured sidebar blocks {%- endcomment -%}
+                                {%- for block in section.blocks -%}
+                                  {%- if block.type == 'sidebar_item' -%}
+                                    <li {{ block.shopify_attributes }}>
+                                      <a href="{{ block.settings.link | default: '#' }}" class="mega-sidebar__link">
+                                        {%- if block.settings.icon != blank -%}
+                                          <span class="mega-sidebar__icon mega-sidebar__icon--img">
+                                            {{- block.settings.icon | image_url: width: 40 | image_tag: loading: 'lazy', alt: block.settings.title -}}
+                                          </span>
+                                        {%- elsif block.settings.icon_emoji != blank -%}
+                                          <span class="mega-sidebar__icon mega-sidebar__icon--emoji" aria-hidden="true">{{ block.settings.icon_emoji }}</span>
+                                        {%- else -%}
+                                          <span class="mega-sidebar__icon mega-sidebar__icon--emoji" aria-hidden="true">•</span>
+                                        {%- endif -%}
+                                        <span class="mega-sidebar__label">{{ block.settings.title | escape }}</span>
+                                      </a>
+                                    </li>
+                                  {%- endif -%}
+                                {%- endfor -%}
+
+                              {%- else -%}
+
+                                {%- comment -%} DEFAULT sidebar — always shown, no blocks needed {%- endcomment -%}
+                                <li>
+                                  <a href="/collections/all" class="mega-sidebar__link">
+                                    <span class="mega-sidebar__icon mega-sidebar__icon--emoji" aria-hidden="true">
+                                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                                    </span>
+                                    <span class="mega-sidebar__label">shop all</span>
+                                  </a>
+                                </li>
+                                <li>
+                                  <a href="/collections/new-arrivals" class="mega-sidebar__link">
+                                    <span class="mega-sidebar__icon mega-sidebar__icon--emoji" aria-hidden="true">
+                                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                    </span>
+                                    <span class="mega-sidebar__label">new arrivals</span>
+                                  </a>
+                                </li>
+                                <li>
+                                  <a href="/pages/supershine" class="mega-sidebar__link">
+                                    <span class="mega-sidebar__icon mega-sidebar__icon--emoji" aria-hidden="true">
+                                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                                    </span>
+                                    <span class="mega-sidebar__label">meet supershine</span>
+                                  </a>
+                                </li>
+                                <li>
+                                  <a href="/pages/bubble-club" class="mega-sidebar__link">
+                                    <span class="mega-sidebar__icon mega-sidebar__icon--emoji" aria-hidden="true">
+                                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                                    </span>
+                                    <span class="mega-sidebar__label">the bubble club</span>
+                                  </a>
+                                </li>
+                                <li>
+                                  <a href="/pages/student-discount" class="mega-sidebar__link">
+                                    <span class="mega-sidebar__icon mega-sidebar__icon--emoji" aria-hidden="true">
+                                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                                    </span>
+                                    <span class="mega-sidebar__label">student discount</span>
+                                  </a>
+                                </li>
+
+                              {%- endif -%}
+
                             </ul>
                           </aside>
+
 
                           {%- comment -%} ── LINK COLUMNS — unique per megamenu ── {%- endcomment -%}
                           <div class="custom-mega-links">
