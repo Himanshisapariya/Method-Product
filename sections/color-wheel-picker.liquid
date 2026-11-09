@@ -155,20 +155,7 @@
                     {% endif %}
                   {% endfor %}
                   {% if matched_hue != null %}
-                    {% render 'color-wheel-card',
-                      card_hue: matched_hue,
-                      card_label: matched_label,
-                      card_title: product.title,
-                      card_price: variant.price | money,
-                      card_image: variant.featured_image | default: product.featured_image,
-                      card_url: product.url | append: '?variant=' | append: variant.id,
-                      card_rating: section.settings.default_rating,
-                      card_review_count: 0,
-                      card_badge: section.settings.default_badge,
-                      card_button_label: section.settings.default_button_label,
-                      form_product: product,
-                      form_variant_id: variant.id
-                    %}
+                    {% render 'color-wheel-card', card_hue: matched_hue, card_label: matched_label, card_title: product.title, card_price: variant.price, card_image: variant.featured_image, default: product.featured_image, card_url: product.url, append: variant.id, card_rating: section.settings.default_rating, card_review_count: 0, card_badge: section.settings.default_badge, card_button_label: section.settings.default_button_label, form_product: product, form_variant_id: variant.id %}
                   {% endif %}
                 {% endfor %}
               {% endfor %}
@@ -189,20 +176,7 @@
                   {% endif %}
                 {% endfor %}
                 {% if matched_hue != null %}
-                  {% render 'color-wheel-card',
-                    card_hue: matched_hue,
-                    card_label: matched_label,
-                    card_title: product.title,
-                    card_price: product.price | money,
-                    card_image: product.featured_image,
-                    card_url: product.url,
-                    card_rating: section.settings.default_rating,
-                    card_review_count: 0,
-                    card_badge: section.settings.default_badge,
-                    card_button_label: section.settings.default_button_label,
-                    form_product: product,
-                    form_variant_id: product.selected_or_first_available_variant.id
-                  %}
+                  {% render 'color-wheel-card', card_hue: matched_hue, card_label: matched_label, card_title: product.title, card_price: product.price, card_image: product.featured_image, card_url: product.url, card_rating: section.settings.default_rating, card_review_count: 0, card_badge: section.settings.default_badge, card_button_label: section.settings.default_button_label, form_product: product, form_variant_id: product.selected_or_first_available_variant.id %}
                 {% endif %}
               {% endfor %}
             {% endif %}
@@ -442,3 +416,54 @@
   ]
 }
 {% endschema %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: |-
+    {% render 'color-wheel-card',
+                          card_hue: matched_hue,
+                          card_label: matched_label,
+                          card_title: product.title,
+                          card_price: variant.price | money,
+                          card_image: variant.featured_image | default: product.featured_image,
+                          card_url: product.url | append: '?variant=' | append: variant.id,
+                          card_rating: section.settings.default_rating,
+                          card_review_count: 0,
+                          card_badge: section.settings.default_badge,
+                          card_button_label: section.settings.default_button_label,
+                          form_product: product,
+                          form_variant_id: variant.id
+                        %}
+  to: "{% render 'color-wheel-card', card_hue: matched_hue, card_label: matched_label,
+    card_title: product.title, card_price: variant.price, card_image: variant.featured_image,
+    default: product.featured_image, card_url: product.url, append: variant.id, card_rating:
+    section.settings.default_rating, card_review_count: 0, card_badge: section.settings.default_badge,
+    card_button_label: section.settings.default_button_label, form_product: product,
+    form_variant_id: variant.id %}"
+  position: 7651..8120
+- from: |-
+    {% render 'color-wheel-card',
+                        card_hue: matched_hue,
+                        card_label: matched_label,
+                        card_title: product.title,
+                        card_price: product.price | money,
+                        card_image: product.featured_image,
+                        card_url: product.url,
+                        card_rating: section.settings.default_rating,
+                        card_review_count: 0,
+                        card_badge: section.settings.default_badge,
+                        card_button_label: section.settings.default_button_label,
+                        form_product: product,
+                        form_variant_id: product.selected_or_first_available_variant.id
+                      %}
+  to: "{% render 'color-wheel-card', card_hue: matched_hue, card_label: matched_label,
+    card_title: product.title, card_price: product.price, card_image: product.featured_image,
+    card_url: product.url, card_rating: section.settings.default_rating, card_review_count:
+    0, card_badge: section.settings.default_badge, card_button_label: section.settings.default_button_label,
+    form_product: product, form_variant_id: product.selected_or_first_available_variant.id
+    %}"
+  position: 9057..9509
+{% endcomment %}
